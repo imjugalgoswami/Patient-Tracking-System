@@ -23,13 +23,11 @@ def register(request):
         user.is_patient = is_patient
         user.is_doctor = is_doctor
         user.save()
-
-        # Create a Patient object if the user is a patient
         if is_patient:
             patient = Patient(user=user)
             patient.save()
 
-        # Create a Doctor object if the user is a doctor
+
         if is_doctor:
             qualification = request.POST['qualification']
             specialization = request.POST['specialization']
@@ -98,7 +96,7 @@ def upload_medical_record(request, patient_id=None):
             medical_record = form.save(commit=False)
             medical_record.patient = Patient.objects.get(user__id=patient_id)
             medical_record.save()
-            return redirect('upload-record-success')  # Replace with your success URL
+            return redirect('upload-record-success')  
     else:
         form = MedicalRecordForm()
     
@@ -112,7 +110,7 @@ def upload_record_success(request):
 
 @login_required
 def schedule_appointment(request):
-    doctors = Doctor.objects.all()  # Fetch all doctors
+    doctors = Doctor.objects.all()  
     if request.method == 'POST':
         form = AppointmentForm(request.POST)
         if form.is_valid():
@@ -123,7 +121,7 @@ def schedule_appointment(request):
     else:
         form = AppointmentForm()
     
-    context = {'form': form, 'doctors': doctors}  # Pass doctors to the context
+    context = {'form': form, 'doctors': doctors}  
     return render(request, 'schedule_appointment.html', context)
 
 def appointment_success(request):
@@ -164,10 +162,8 @@ def search_patients(request):
     keyword = request.GET.get('keyword')
     
     if keyword:
-        # Search for medical records that contain the keyword
         medical_records = MedicalRecord.objects.filter(description__icontains=keyword)
         
-        # Get unique patients from these medical records
         patients = User.objects.filter(patient__medicalrecord__in=medical_records).distinct()
     else:
         patients = []
@@ -179,7 +175,6 @@ def doctor_patient_list(request):
         return redirect('login')
 
     if request.user.is_doctor:
-        # Assuming 'Doctor' model has a 'user' field pointing to the User model
         appointments = Appointment.objects.filter(doctor=request.user.doctor)
         return render(request, 'doctor_patient_list.html', {'appointments': appointments})
 
@@ -215,7 +210,7 @@ def view_medical_history(request, patient_id):
     try:
         patient = Patient.objects.get(user__id=patient_id)
     except Patient.DoesNotExist:
-        return redirect('doctor_patient_filter')  # Redirect to patient list if patient does not exist
+        return redirect('doctor_patient_filter')  
 
     appointments = Appointment.objects.filter(patient__id=patient_id).order_by('-date', '-time')
     medical_records = MedicalRecord.objects.filter(patient__user__id=patient_id).order_by('-uploaded_at')
