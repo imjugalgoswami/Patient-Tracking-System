@@ -7,6 +7,15 @@ from django.contrib.auth.decorators import login_required
 from .forms import PatientUpdateForm, DoctorUpdateForm
 from .forms import MedicalRecordForm,AppointmentForm
 
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
+from .models import Patient, Doctor
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+from django.db import IntegrityError
+
 def register(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -19,14 +28,26 @@ def register(request):
         if password != confirm_password:
             return render(request, 'register.html', {'error': 'Passwords do not match'})
 
+        try:
+            existing_user = User.objects.get(username=username)
+            return render(request, 'register.html', {'error': 'Username already exists. Please choose a different one.'})
+        except User.DoesNotExist:
+            pass
+
+        try:
+            existing_email = User.objects.get(email=email)
+            return render(request, 'register.html', {'error': 'Email already exists. Please use a different one.'})
+        except User.DoesNotExist:
+            pass
+
         user = User.objects.create_user(username=username, password=password, email=email)
         user.is_patient = is_patient
         user.is_doctor = is_doctor
         user.save()
+
         if is_patient:
             patient = Patient(user=user)
             patient.save()
-
 
         if is_doctor:
             qualification = request.POST['qualification']

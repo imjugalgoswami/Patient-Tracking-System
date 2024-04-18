@@ -6,6 +6,13 @@
 
 {% block content %}
     <h2>Register</h2>
+
+    {% if error %}
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+    {% endif %}
+
     <form method="post">
         {% csrf_token %}
         <div class="form-group">
@@ -44,15 +51,4 @@
         </div>
         <button type="submit" class="btn btn-primary">Register</button>
     </form>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const isDoctorCheckbox = document.querySelector('input[name="is_doctor"]');
-            const doctorFields = document.getElementById('doctor_fields');
-
-            isDoctorCheckbox.addEventListener('change', function() {
-                doctorFields.style.display = this.checked ? 'block' : 'none';
-            });
-        });
-    </script>
 {% endblock %}
