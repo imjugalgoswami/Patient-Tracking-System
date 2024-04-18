@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Doctor Patient List
+{% endblock %}
+
+{% block content %}
+<h1>Doctor Patient List</h1>
+
+{% if appointments %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Patient Name</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Reason</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appointment in appointments %}
+                <tr>
+                    <td>{{ appointment.patient.username }}</td>
+                    <td>{{ appointment.date }}</td>
+                    <td>{{ appointment.time }}</td>
+                    <td>{{ appointment.reason }}</td>
+                    <td>
+                        <a href="{% url 'upload_medical_record' appointment.patient.id %}" class="btn btn-primary">Add Medical Record</a>
+                        <a href="{% url 'view_medical_history' appointment.patient.id %}" class="btn btn-info">View Medical History</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No appointments available.</p>
+{% endif %}
+
+{% endblock %}

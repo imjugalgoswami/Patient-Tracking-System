@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Upcoming Appointments
+{% endblock %}
+
+{% block content %}
+    <h1>Upcoming Appointments</h1>
+
+    {% if appointments %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Doctor</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                    <tr>
+                        <td>{{ appointment.doctor.user.username }}</td>
+                        <td>{{ appointment.date }}</td>
+                        <td>{{ appointment.time }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No upcoming appointments.</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Filtered Patients
+{% endblock %}
+
+{% block content %}
+<h1>Filtered Patients</h1>
+
+<form method="get" action="{% url 'doctor_patient_filter' %}" class="mb-3">
+    <div class="form-row">
+        <div class="col">
+            <label for="patient_id">Patient ID:</label>
+            <input type="text" name="patient_id" id="patient_id" class="form-control" value="{{ request.GET.patient_id }}">
+        </div>
+        <div class="col">
+            <label for="patient_name">Patient Name:</label>
+            <input type="text" name="patient_name" id="patient_name" class="form-control" value="{{ request.GET.patient_name }}">
+        </div>
+        <div class="col">
+            <label for="severity">Severity of Disease:</label>
+            <select name="severity" id="severity" class="form-control">
+                <option value="" {% if not request.GET.severity %}selected{% endif %}>Select Severity</option>
+                <option value="Low" {% if request.GET.severity == "Low" %}selected{% endif %}>Low</option>
+                <option value="Medium" {% if request.GET.severity == "Medium" %}selected{% endif %}>Medium</option>
+                <option value="High" {% if request.GET.severity == "High" %}selected{% endif %}>High</option>
+            </select>
+        </div>
+        <div class="col">
+            <button type="submit" class="btn btn-primary mt-4">Filter</button>
+        </div>
+    </div>
+</form>
+
+{% if patients %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Patient ID</th>
+                <th>Patient Name</th>
+                <th>Severity of Disease</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for patient in patients %}
+                <tr>
+                    <td>{{ patient.user.id }}</td>
+                    <td>{{ patient.user.username }}</td>
+                    <td>{{ patient.medicalrecord.severity }}</td>
+                    <td>
+                        <a href="{% url 'upload_medical_record' patient.user.id %}" class="btn btn-primary">Add Medical Record</a>
+                        <a href="{% url 'view_medical_history' patient.user.id %}" class="btn btn-info">View Medical History</a>
+
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No patients match the filter criteria.</p>
+{% endif %}
+
+{% endblock %}

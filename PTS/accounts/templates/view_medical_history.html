@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Medical History - {{ patient.user.username }}
+{% endblock %}
+
+{% block content %}
+    <h1>Medical History for {{ patient.user.username }}</h1>
+
+    <h2>Appointments</h2>
+    {% if appointments %}
+        <ul>
+            {% for appointment in appointments %}
+                <li>
+                    <strong>Date:</strong> {{ appointment.date }}<br>
+                    <strong>Time:</strong> {{ appointment.time }}<br>
+                    <strong>Status:</strong> {{ appointment.status }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No previous appointments.</p>
+    {% endif %}
+
+    <h2>Medical Records</h2>
+    {% if medical_records %}
+        <ul>
+            {% for record in medical_records %}
+                <li>
+                    <strong>Type:</strong> {{ record.record_type }}<br>
+                    <strong>Uploaded At:</strong> {{ record.uploaded_at }}<br>
+                    <a href="{{ record.file.url }}" target="_blank">View File</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No medical records available.</p>
+    {% endif %}
+{% endblock %}

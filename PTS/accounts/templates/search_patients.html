@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Search Patients
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Search Patients by Medical Record</h2>
+    <form method="get">
+        <div class="form-group">
+            <label for="keyword">Keyword:</label>
+            <input type="text" name="keyword" id="keyword" class="form-control" value="{{ keyword }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <h3>Search Results:</h3>
+    <ul>
+        {% for patient in patients %}
+            <li>{{ patient.username }}</li>
+        {% empty %}
+            <li>No patients found.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

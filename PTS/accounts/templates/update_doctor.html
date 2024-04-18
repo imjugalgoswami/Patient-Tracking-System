@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Update Doctor Details
+{% endblock %}
+
+{% block content %}
+    <h2>Update Doctor Details</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="phone">Phone:</label>
+            <input type="text" name="phone" class="form-control" value="{{ form.phone.value }}" required>
+        </div>
+        <div class="form-group">
+            <label for="specialization">Specialization:</label>
+            <input type="text" name="specialization" class="form-control" value="{{ form.specialization.value }}" required>
+        </div>
+        <div class="form-group">
+            <label for="qualification">Qualification:</label>
+            <input type="text" name="qualification" class="form-control" value="{{ form.qualification.value }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+{% endblock %}

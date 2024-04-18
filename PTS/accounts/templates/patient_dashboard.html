@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Patient Dashboard
+{% endblock %}
+
+{% block content %}
+<h1>Welcome, {{ request.user.username }}</h1>
+
+<h2>Patient Actions</h2>
+<ul>
+    <li><a href="{% url 'update_patient' %}">Update Details</a></li>
+    <li><a href="{% url 'schedule_appointment' %}">Schedule Appointment</a></li>
+    <li><a href="{% url 'view_upcoming_appointments' %}">View Upcoming Appointments</a></li>
+    <li><a href="{% url 'view_appointment_history' %}">View Appointment History</a></li>
+</ul>
+
+{% endblock %}
